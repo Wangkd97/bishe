@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC
+        "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+    <properties resource="jdbc.properties"></properties>
+    <!--mysql驱动包的位置-->
+    <classPathEntry location="${db.mysql.location}"/>
+    <context id="context" targetRuntime="MyBatis3Simple">
+        <commentGenerator>
+            <property name="suppressAllComments" value="false"/>
+            <property name="suppressDate" value="true"/>
+        </commentGenerator>
+        <!--加载数据库连接的参数-->
+        <jdbcConnection userId="${jdbc.user}"
+                        password="${jdbc.password}"
+                        driverClass="${jdbc.driver}"
+                        connectionURL="${jdbc.url}"/>
+
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+        <!--配置java实体类的生成位置-->
+        <javaModelGenerator targetPackage="com.ysu.tour.pojo" targetProject="./src/main/java">
+            <property name="enableSubPackages" value="false"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!--配置sql映射文件的生成位置-->
+        <sqlMapGenerator targetPackage="com.ysu.tour.mapper" targetProject="./src/main/resources">
+            <property name="enableSubPackages" value="false"/>
+        </sqlMapGenerator>
+
+        <!--配置dao接口的生成位置-->
+        <javaClientGenerator targetPackage="com.ysu.tour.dao" type="XMLMAPPER" targetProject="./src/main/java">
+            <property name="enableSubPackages" value="false"/>
+        </javaClientGenerator>
+
+        <table  tableName="user_table" domainObjectName="UserInfo" enableCountByExample="false" enableDeleteByExample="false"
+                       enableSelectByExample="false" enableUpdateByExample="false"/>
+        <table  tableName="strategy_table" domainObjectName="Category" enableCountByExample="false" enableDeleteByExample="false"
+                enableSelectByExample="false" enableUpdateByExample="false"/>
+        <table  tableName="strategy_pic_table" domainObjectName="CategoryPic" enableCountByExample="false" enableDeleteByExample="false"
+                enableSelectByExample="false" enableUpdateByExample="false"/>
+        <table  tableName="season_table" domainObjectName="Season" enableCountByExample="false" enableDeleteByExample="false"
+                enableSelectByExample="false" enableUpdateByExample="false"/>
+        <table  tableName="play_name" domainObjectName="Play" enableCountByExample="false" enableDeleteByExample="false"
+                enableSelectByExample="false" enableUpdateByExample="false"/>
+        <table  tableName="people_table" domainObjectName="People" enableCountByExample="false" enableDeleteByExample="false"
+                enableSelectByExample="false" enableUpdateByExample="false"/>
+        <table  tableName="comment_table" domainObjectName="Comment" enableCountByExample="false" enableDeleteByExample="false"
+                enableSelectByExample="false" enableUpdateByExample="false"/>
+
+
+</context>
+</generatorConfiguration>
