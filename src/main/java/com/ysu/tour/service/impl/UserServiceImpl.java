@@ -8,6 +8,8 @@ import com.ysu.tour.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements IUserService {
 
@@ -48,6 +50,19 @@ public class UserServiceImpl implements IUserService {
                 return ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"创建失败");
             }
         }
+
+    }
+
+    @Override
+    public ServerResponse selectAll() {
+        List<UserInfo> list =userInfoMapper.selectAll();
+        if (list!=null){
+            return ServerResponse.createServerResponseBySucess(list);
+
+        }else{
+            return ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"无用户");
+        }
+
 
     }
 

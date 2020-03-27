@@ -2,6 +2,7 @@ package com.ysu.tour.controller;
 
 import com.ysu.tour.comment.ResponseCode;
 import com.ysu.tour.comment.ServerResponse;
+import com.ysu.tour.pojo.Category;
 import com.ysu.tour.service.ISeasonService;
 import com.ysu.tour.service.IStrategyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ public class CategoryController {
 
     @Autowired
     IStrategyService strategyService;
+
+    @Autowired
     ISeasonService seasonService;
 
 
@@ -44,4 +47,26 @@ public class CategoryController {
         }
     }
 
+    @RequestMapping(value = "strategyinsert.do",method = RequestMethod.POST)
+    public ServerResponse strategyinsert(Category category){
+
+        ServerResponse serverResponse=strategyService.insert(category);
+
+        if (serverResponse.getStatus()==0){
+            return ServerResponse.createServerResponseBySucess(serverResponse);
+        }else{
+            return ServerResponse.createServerResponseByFail(ResponseCode.ERROR,serverResponse.getMsg());
+        }
+    }
+    @RequestMapping(value = "selectbyid.do",method = RequestMethod.POST)
+    public ServerResponse selectbyid(Integer id){
+
+        ServerResponse serverResponse=strategyService.selectByPrimaryKey(id);
+
+        if (serverResponse.getStatus()==0){
+            return ServerResponse.createServerResponseBySucess(serverResponse);
+        }else{
+            return ServerResponse.createServerResponseByFail(ResponseCode.ERROR,serverResponse.getMsg());
+        }
+    }
 }

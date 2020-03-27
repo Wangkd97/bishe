@@ -47,7 +47,16 @@ public class UserController {
                 return ServerResponse.createServerResponseByFail(insertuser.getMsg());
             }
     }
+    @RequestMapping(value = "selectAll.do",method = RequestMethod.POST)
+    public ServerResponse selectAll(){
 
+        ServerResponse alluser=userService.selectAll();
+        if (alluser.getStatus()==ResponseCode.SUCCESS||alluser!=null){
+            return ServerResponse.createServerResponseBySucess(alluser.getData());
+        }else{
+            return ServerResponse.createServerResponseByFail(alluser.getMsg());
+        }
+    }
 
 
 }

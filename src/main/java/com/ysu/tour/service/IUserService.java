@@ -8,6 +8,7 @@ public interface IUserService {
 
     ServerResponse login (UserInfo userInfo) ;
     ServerResponse insert(UserInfo userInfo);
+    ServerResponse selectAll();
 
 
 }

@@ -51,4 +51,14 @@
     select play_id, play_name
     from play_name
   </select>
+
+
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select p.play_id,p.play_name from strategy_play_table as s JOIN play_name as p
+    on s.play_id=p.play_id where strategy_id=#{strategyId}
+
+  </select>
+
+
+
 </mapper>

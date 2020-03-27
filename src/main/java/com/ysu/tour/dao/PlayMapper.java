@@ -43,4 +43,5 @@ public interface PlayMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(Play record);
+    List<Play> selectById(Integer id);
 }
