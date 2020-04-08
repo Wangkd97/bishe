@@ -6,10 +6,7 @@ import com.ysu.tour.pojo.Category;
 import com.ysu.tour.service.ISeasonService;
 import com.ysu.tour.service.IStrategyService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController   //让返回值为字符串
 @RequestMapping("/manage/strategy/")
@@ -21,7 +18,6 @@ public class CategoryController {
 
     @Autowired
     ISeasonService seasonService;
-
 
     @RequestMapping(value = "strategy.do",method = RequestMethod.POST)
     public ServerResponse strategy(){
@@ -65,6 +61,28 @@ public class CategoryController {
 
         if (serverResponse.getStatus()==0){
             return ServerResponse.createServerResponseBySucess(serverResponse);
+        }else{
+            return ServerResponse.createServerResponseByFail(ResponseCode.ERROR,serverResponse.getMsg());
+        }
+    }
+    @RequestMapping(value = "fenyeselect.do",method = RequestMethod.POST)
+    public ServerResponse fenyeselect( Integer start){
+
+        ServerResponse serverResponse= strategyService.fenyeselect(start);
+
+        if (serverResponse.getStatus()==0){
+            return ServerResponse.createServerResponseBySucess(serverResponse.getData());
+        }else{
+            return ServerResponse.createServerResponseByFail(ResponseCode.ERROR,serverResponse.getMsg());
+        }
+    }
+    @RequestMapping(value = "selectcountall.do",method = RequestMethod.POST)
+    public ServerResponse selectcountall(){
+
+        ServerResponse serverResponse= strategyService.selectcountall();
+
+        if (serverResponse.getStatus()==0){
+            return ServerResponse.createServerResponseBySucess(serverResponse.getData());
         }else{
             return ServerResponse.createServerResponseByFail(ResponseCode.ERROR,serverResponse.getMsg());
         }

@@ -1,6 +1,8 @@
 package com.ysu.tour.dao;
 
 import com.ysu.tour.pojo.Category;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 public interface CategoryMapper {
@@ -44,4 +46,6 @@ public interface CategoryMapper {
      */
     int updateByPrimaryKey(Category record);
 
+    List<Category> fenyeselect(Integer start);
+    int selectcountall();
 }

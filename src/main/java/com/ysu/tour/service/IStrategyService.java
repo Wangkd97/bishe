@@ -8,4 +8,6 @@ public interface IStrategyService {
     ServerResponse selectAll();
     ServerResponse insert(Category category);
     ServerResponse selectByPrimaryKey(Integer id);
+    ServerResponse fenyeselect(Integer start);
+    ServerResponse selectcountall();
 }

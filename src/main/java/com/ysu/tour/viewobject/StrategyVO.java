@@ -31,6 +31,33 @@ public class StrategyVO {
     private Integer sPicId;     //攻略中的图片
     private String sPeople;  //攻略中人物
     private List<String> sPlay;    //攻略的玩法
+    private String sMasterName;
+    private Integer sMasterId;
+    private String sMasterUrl;
+
+    public String getsMasterName() {
+        return sMasterName;
+    }
+
+    public void setsMasterName(String sMasterName) {
+        this.sMasterName = sMasterName;
+    }
+
+    public Integer getsMasterId() {
+        return sMasterId;
+    }
+
+    public void setsMasterId(Integer sMasterId) {
+        this.sMasterId = sMasterId;
+    }
+
+    public String getsMasterUrl() {
+        return sMasterUrl;
+    }
+
+    public void setsMasterUrl(String sMasterUrl) {
+        this.sMasterUrl = sMasterUrl;
+    }
 
     private String sSeason;  //攻略的时节
     public Integer getsId() {

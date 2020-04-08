@@ -7,6 +7,15 @@ public class Category {
      *
      * @mbggenerated
      */
+    private Integer sMasterId;
+
+    public Integer getsMasterId() {
+        return sMasterId;
+    }
+
+    public void setsMasterId(Integer sMasterId) {
+        this.sMasterId = sMasterId;
+    }
 
     private String sGotime;
 

@@ -22,5 +22,10 @@ public class PictureController {
         String path="D:\\qrcode";
         return iPictureService.uploadPic(file,path);
     }
+    @RequestMapping(value = "uploadCover.do")
+    public ServerResponse uploadCover(@RequestParam(value = "uploadCover",required = false)MultipartFile file){
+        String path="D:\\qrcode";
+        return iPictureService.uploadPic(file,path);
+    }
 
 }
