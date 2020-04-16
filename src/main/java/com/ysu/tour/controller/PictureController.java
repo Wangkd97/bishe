@@ -28,4 +28,5 @@ public class PictureController {
         return iPictureService.uploadPic(file,path);
     }
 
+
 }

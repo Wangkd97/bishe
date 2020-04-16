@@ -34,6 +34,15 @@ public class StrategyVO {
     private String sMasterName;
     private Integer sMasterId;
     private String sMasterUrl;
+    private List<String> sPics;
+
+    public List<String> getsPics() {
+        return sPics;
+    }
+
+    public void setsPics(List<String> sPics) {
+        this.sPics = sPics;
+    }
 
     public String getsMasterName() {
         return sMasterName;

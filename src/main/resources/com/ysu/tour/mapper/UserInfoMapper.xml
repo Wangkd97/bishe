@@ -75,7 +75,7 @@
     -->
     select u_id, u_status, u_name, u_email, u_pwd, u_gender, u_age, u_pic
     from user_table
-    where u_name = #{user.uName} and u_pwd = #{user.uPwd}
+    where u_email = #{user.uEmail} and u_pwd = #{user.uPwd}
   </select>
 
 </mapper>

@@ -19,16 +19,14 @@ public class UserServiceImpl implements IUserService {
     @Override
     public ServerResponse login(UserInfo userInfo) {
 
-        if(userInfo.getuName()==null||userInfo.getuName().equals("")){
+        if(userInfo.getuEmail()==null||userInfo.getuEmail().equals("")){
           // "用户名不能为空");  100代表用户名为空。
             return ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"用户名不能为空");
         }
         if(userInfo.getuPwd()==null||userInfo.getuPwd().equals("")){
             return ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"密码不能为空");
         }
-        UserInfo userInfo1=new UserInfo();
-
-        userInfo1=userInfoMapper.selectByUserNameAndPwd(userInfo);
+        UserInfo userInfo1=userInfoMapper.selectByUserNameAndPwd(userInfo);
 
         return ServerResponse.createServerResponseBySucess(userInfo1);
     }

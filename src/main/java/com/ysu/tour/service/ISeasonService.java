@@ -5,6 +5,6 @@ import com.ysu.tour.comment.ServerResponse;
 public interface ISeasonService {
 
 
-
+    ServerResponse selectAll();
     ServerResponse find(Integer id);
 }

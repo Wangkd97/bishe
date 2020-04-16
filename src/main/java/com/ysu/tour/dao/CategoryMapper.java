@@ -48,4 +48,13 @@ public interface CategoryMapper {
 
     List<Category> fenyeselect(Integer start);
     int selectcountall();
+    List<Category> fenleiselect(@Param("month") String month,
+                                @Param("day") String day,@Param("pay") String pay,
+                                @Param("people") String people,@Param("play") String play,@Param("start") int start);
+    List<Category> fuzzyselect(@Param("name") String name,@Param("start") int start);
+    int countfuzzyall(String name);
+    int countfenleiall(@Param("month") String month,
+                                @Param("day") String day,@Param("pay") String pay,
+                                @Param("people") String people,@Param("play") String play);
+    int insertPlay(@Param("strategyId") int strategyId,@Param("playId") int playId);
 }

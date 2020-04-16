@@ -43,4 +43,5 @@ public interface CategoryPicMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(CategoryPic record);
+    List<CategoryPic> selectBySId(Integer sId);
 }
