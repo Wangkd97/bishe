@@ -1,15 +1,21 @@
 package com.ysu.tour.controller;
 
+import com.ysu.tour.comment.Const;
 import com.ysu.tour.comment.ResponseCode;
 import com.ysu.tour.comment.ServerResponse;
 import com.ysu.tour.pojo.Category;
 import com.ysu.tour.pojo.CategoryPic;
+import com.ysu.tour.pojo.UserInfo;
 import com.ysu.tour.service.IPictureService;
 import com.ysu.tour.service.ISeasonService;
 import com.ysu.tour.service.IStrategyService;
+import com.ysu.tour.service.IUserActiveService;
+import com.ysu.tour.viewobject.StrategyVO;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController   //让返回值为字符串
@@ -24,6 +30,9 @@ public class CategoryController {
     ISeasonService seasonService;
     @Autowired
     IPictureService pictureService;
+
+    @Autowired
+    IUserActiveService userActiveService;
     @RequestMapping(value = "strategy.do",method = RequestMethod.POST)
     public ServerResponse strategy(){
         ServerResponse serverResponse= strategyService.selectAll();
@@ -66,8 +75,12 @@ public class CategoryController {
         }
     }
     @RequestMapping(value = "selectbyid.do",method = RequestMethod.POST)
-    public ServerResponse selectbyid(Integer id){
+    public ServerResponse selectbyid(Integer id,HttpSession session){
 
+        UserInfo userInfo =(UserInfo) session.getAttribute(Const.CURRENT_USER);
+        if (userInfo!=null){
+            System.out.println("============");
+        }
         ServerResponse serverResponse=strategyService.selectByPrimaryKey(id);
 
         if (serverResponse.getStatus()==0){
@@ -77,7 +90,8 @@ public class CategoryController {
         }
     }
     @RequestMapping(value = "fenyeselect.do",method = RequestMethod.POST)
-    public ServerResponse fenyeselect( Integer start){
+    public ServerResponse fenyeselect(Integer start){
+        System.out.println("start=="+start);
 
         ServerResponse serverResponse= strategyService.fenyeselect(start);
 
@@ -159,5 +173,171 @@ public class CategoryController {
             return ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"失败");
         }
     }
+    @RequestMapping(value = "byuser.do",method = RequestMethod.POST)
+    public ServerResponse byuser(Integer userId,Integer start){
+       ServerResponse serverResponse = strategyService.selectAllByUserId(userId,start);
+       if (serverResponse.getStatus()==0){
+           return  ServerResponse.createServerResponseBySucess(serverResponse.getData());
+       }else{
+            return  ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"失败");
+       }
+    }
 
+    @RequestMapping(value = "dobyuser.do",method = RequestMethod.POST)
+    public ServerResponse dobyuser(Integer userId,Integer start){
+        ServerResponse serverResponse = strategyService.selectDoByUserId(userId,start);
+        if (serverResponse.getStatus()==0){
+            return  ServerResponse.createServerResponseBySucess(serverResponse.getData());
+        }else{
+            return  serverResponse.createServerResponseByFail(ResponseCode.ERROR,"失败");
+        }
+    }
+
+    @RequestMapping(value = "undobyuser.do",method = RequestMethod.POST)
+    public ServerResponse undobyuser(Integer userId,Integer start){
+        ServerResponse serverResponse = strategyService.selectUnDoByUserId(userId,start);
+        if (serverResponse.getStatus()==0){
+            return  ServerResponse.createServerResponseBySucess(serverResponse.getData());
+        }else{
+            return  ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"失败");
+        }
+    }
+
+    @RequestMapping(value = "countbyuser.do",method = RequestMethod.POST)
+    public ServerResponse countbyuser(Integer userId){
+        ServerResponse serverResponse = strategyService.selectcountallByUser(userId);
+        if (serverResponse.getStatus()==0){
+            return  ServerResponse.createServerResponseBySucess(serverResponse.getData());
+        }else{
+            return  ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"失败");
+        }
+    }
+    @RequestMapping(value = "countIfDobyuser.do",method = RequestMethod.POST)
+    public ServerResponse countbyuser(Integer userId,Integer status){
+        ServerResponse serverResponse = strategyService.selectcountallIfDoByUser(userId,status);
+        if (serverResponse.getStatus()==0){
+            return  ServerResponse.createServerResponseBySucess(serverResponse.getData());
+        }else{
+            return  ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"失败");
+        }
+    }
+
+    @RequestMapping(value = "updateStatus.do",method = RequestMethod.POST)
+    public ServerResponse updateStatus(Integer strategyId){
+        ServerResponse serverResponse = strategyService.updateStatus(strategyId);
+        if (serverResponse.getStatus()==0){
+            return  ServerResponse.createServerResponseBySucess(serverResponse.getData());
+        }else{
+            return  ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"失败");
+        }
+    }
+
+    @RequestMapping(value = "updateStrategy.do",method = RequestMethod.POST)
+    public ServerResponse updateStrategy(StrategyVO strategyVO){
+        ServerResponse serverResponse = strategyService.updateStrategy(strategyVO);
+        if (serverResponse.getStatus()==0){
+            return  ServerResponse.createServerResponseBySucess(serverResponse.getData());
+        }else{
+            return  ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"失败");
+        }
+    }
+
+    @RequestMapping(value = "updateLookNum.do",method = RequestMethod.POST)
+    public ServerResponse updateLookNum(Integer sId,HttpSession session){
+
+        synchronized (this){
+            UserInfo userInfo = (UserInfo) session.getAttribute(Const.CURRENT_USER);
+            if (userInfo!=null){
+                userActiveService.updateLook(userInfo.getuId());
+            }
+
+            ServerResponse serverResponse = strategyService.updateLookNum(sId);
+            if (serverResponse.getStatus()==0){
+                return  ServerResponse.createServerResponseBySucess(serverResponse.getData());
+            }else{
+                return  ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"失败");
+            }
+        }
+
+    }
+
+    @RequestMapping(value = "updateClickNum.do",method = RequestMethod.POST)
+    public ServerResponse updateClickNum(Integer sId ,HttpSession session){
+        synchronized (this){
+            UserInfo userInfo = (UserInfo) session.getAttribute(Const.CURRENT_USER);
+            if (userInfo!=null){
+                userActiveService.updateClick(userInfo.getuId());
+            }
+            ServerResponse serverResponse = strategyService.updateClickNum(sId);
+            if (serverResponse.getStatus()==0){
+                return  ServerResponse.createServerResponseBySucess(serverResponse.getData());
+            }else{
+                return  ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"失败");
+            }
+        }
+
+    }
+
+    @RequestMapping(value = "updateCommentNum.do",method = RequestMethod.POST)
+    public ServerResponse updateCommentNum(Integer sId,HttpSession session){
+        synchronized (this){
+            UserInfo userInfo = (UserInfo) session.getAttribute(Const.CURRENT_USER);
+            if (userInfo!=null){
+                userActiveService.updateComment(userInfo.getuId());
+            }
+            ServerResponse serverResponse = strategyService.updateCommentNum(sId);
+            if (serverResponse.getStatus()==0){
+                return  ServerResponse.createServerResponseBySucess(serverResponse.getData());
+            }else{
+                return  ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"失败");
+            }
+        }
+
+    }
+
+    @RequestMapping(value = "substractLookNum.do",method = RequestMethod.POST)
+    public ServerResponse substractLookNum(Integer sId){
+        synchronized (this){
+            Integer value = strategyService.substractLookNum(sId);
+            if (value!=0){
+                return  ServerResponse.createServerResponseBySucess(value);
+            }else{
+                return  ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"失败");
+            }
+        }
+
+    }
+
+    @RequestMapping(value = "substractClickNum.do",method = RequestMethod.POST)
+    public ServerResponse substractClickNum(Integer sId){
+        synchronized (this){
+            int value = strategyService.substractClickNum(sId);
+            if (value!=0){
+                return  ServerResponse.createServerResponseBySucess(value);
+            }else{
+                return  ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"失败");
+            }
+        }
+
+    }
+
+    @RequestMapping(value = "substractCommentNum.do",method = RequestMethod.POST)
+    public ServerResponse substractCommentNum(Integer sId){
+        synchronized (this){
+            int value = strategyService.substractCommentNum(sId);
+            if (value!=0){
+                return  ServerResponse.createServerResponseBySucess(value);
+            }else{
+                return  ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"失败");
+            }
+        }
+
+    }
+
+    @RequestMapping(value = "getActive.do",method = RequestMethod.POST)
+    public ServerResponse getActive( ){
+        List<Category> list = strategyService.selectActiveTopFive();
+       return ServerResponse.createServerResponseBySucess(list);
+
+    }
 }//end

@@ -1,6 +1,8 @@
 package com.ysu.tour.dao;
 
 import com.ysu.tour.pojo.Category;
+import com.ysu.tour.viewobject.StrategyVO;
+import com.ysu.tour.viewobject.SysStrategyVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -57,4 +59,43 @@ public interface CategoryMapper {
                                 @Param("day") String day,@Param("pay") String pay,
                                 @Param("people") String people,@Param("play") String play);
     int insertPlay(@Param("strategyId") int strategyId,@Param("playId") int playId);
+
+    List<Category> selectAllByUserId(@Param("userId") Integer userId,@Param("start") Integer start);
+    List<Category> selectDoByUserId(@Param("userId") Integer userId,@Param("start") Integer start);
+    List<Category> selectUnDoByUserId(@Param("userId") Integer userId,@Param("start") Integer start);
+    int selectcountallByUser(@Param("userId") Integer userId);
+    int selectcountallIfDoByUser(@Param("userId") Integer userId,@Param("status") Integer status);
+    int updateStatus(Integer strategyId);
+    int updateStrategy(StrategyVO category);
+    int updateStrategyPlay(@Param("playId") Integer playId,@Param("strategyId") Integer strategyId,
+                           @Param("oldPlayId") Integer oldPlayId);
+
+    int updateLookNum(Integer sId);
+    int updateClickNum(Integer sId);
+    int updateCommentNum(Integer sId);
+
+    int substractCommentNum(Integer sId);
+    int substractLookNum(Integer sId);
+    int substractClickNum(Integer sId);
+
+    Category selectMasterBysId(Integer sId);
+
+    Category selectActiveBysId(Integer sId);
+    int updateActiveNum(@Param("sActiveNum") Integer sActiveNum,@Param("sId") Integer sId);
+
+    List<Category> selectAllToActive();
+
+    List<Category> selectActiveTopFive();
+
+    //以下是管理员
+    List<SysStrategyVo> sysSelectAll(Integer start);
+
+    int sysUpdateStatus (Integer strategyId);
+    int sysSelectAllCount();
+    List <SysStrategyVo> sysSelectIfNot(@Param("status") Integer status,@Param("start") Integer start);
+    int sysSelectIfNotCount(Integer status);
+    List <SysStrategyVo> sysFuzzySelect(@Param("status") Integer status,@Param("start") Integer start,@Param("name") String name);
+    int syscountfuzzyall(@Param("status") Integer status,@Param("name") String name);
+
+    List<Category> sysselectActiveTopTen();
 }

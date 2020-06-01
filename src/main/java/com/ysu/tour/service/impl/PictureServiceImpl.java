@@ -32,6 +32,7 @@ public class PictureServiceImpl  implements IPictureService{
         String extendName =".jpg";
         //重新生成名字
         String newFileName = UUID.randomUUID().toString()+extendName;
+        System.out.println("newFileName======"+newFileName);
         File pathFile=new File(path);
         if(!pathFile.exists()){
             pathFile.setWritable(true);

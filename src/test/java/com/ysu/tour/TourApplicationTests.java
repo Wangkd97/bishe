@@ -1,9 +1,17 @@
 package com.ysu.tour;
 
+import com.ysu.tour.comment.ServerResponse;
+import com.ysu.tour.dao.CategoryMapper;
+import com.ysu.tour.pojo.Category;
+import com.ysu.tour.pojo.UserInfo;
+import com.ysu.tour.service.IUserService;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,33 +42,186 @@ class TourApplicationTests {
 		}
 	
 	}
-	public static List<String> getImgSrc(String content){
-		List<String> list = new ArrayList<String>();
-		//目前img标签标示有3种表达式
-		//<img alt="" src="1.jpg"/>   <img alt="" src="1.jpg"></img>     <img alt="" src="1.jpg">
-		//开始匹配content中的<img />标签
-		Pattern p_img = Pattern.compile("<(img|IMG)(.*?)(/>|></img>|>)");
-		Matcher m_img = p_img.matcher(content);
-		boolean result_img = m_img.find();
-		if (result_img) {
-			while (result_img) {
-				//获取到匹配的<img />标签中的内容
-				String str_img = m_img.group(2);
 
-				//开始匹配<img />标签中的src
-				Pattern p_src = Pattern.compile("(src|SRC)=(\"|\')(.*?)(\"|\')");
-				Matcher m_src = p_src.matcher(str_img);
-				if (m_src.find()) {
-					String str_src = m_src.group(3);
-					list.add(str_src);
-				}
-				//结束匹配<img />标签中的src
-				//匹配content中是否存在下一个<img />标签，有则继续以上步骤匹配<img />标签中的src
-				result_img = m_img.find();
+public static List<String> getImgSrc(String content){
+	int num=0;
+	List<String> list = new ArrayList<String>();
+	//目前img标签标示有3种表达式
+	//<img alt="" src="1.jpg"/>   <img alt="" src="1.jpg"></img>     <img alt="" src="1.jpg">
+	//开始匹配content中的<img />标签
+	Pattern p_img = Pattern.compile("<(img|IMG)(.*?)(/>|></img>|>)");
+	Matcher m_img = p_img.matcher(content);
+	boolean result_img = m_img.find();
+	if (result_img) {
+		while (result_img) {
+			//获取到匹配的<img />标签中的内容
+			String str_img = m_img.group(2);
+
+			//开始匹配<img />标签中的src
+			Pattern p_src = Pattern.compile("(src|SRC)=(\"|\')(.*?)(\"|\')");
+			Matcher m_src = p_src.matcher(str_img);
+			if (m_src.find()) {
+				String str_src = m_src.group(3);
+				list.add(str_src);
+				num++;
+
 			}
+			//结束匹配<img />标签中的src
+			//匹配content中是否存在下一个<img />标签，有则继续以上步骤匹配<img />标签中的src
+			result_img = m_img.find();
 		}
-		return list;
+	}
+	return list;
+}
+	@Autowired
+	IUserService userService;
+
+	@Autowired
+	CategoryMapper categoryMapper;
+	@Test
+	void insertUser(){
+		try {
+
+//			BufferedReader reader = new BufferedReader(new FileReader("E:\\qq记录\\229354948\\FileRecv\\2.csv"));//换成你的文件名
+//
+//			reader.readLine();//第一行信息，为标题信息，不用,如果需要，注释掉
+			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream("E:\\qq记录\\229354948\\FileRecv\\2.csv"), "GBK"));//GBK
+              reader.readLine();//显示标题行,没有则注释掉
+//                 System.out.println(reader.readLine());
+
+			String line = null;
+			int num=3;
+			while((line=reader.readLine())!=null&&num<=201){
+				String item[] = line.split(",");//CSV格式文件为逗号分隔符文件，这里根据逗号切分
+				String uEmail=item[0]+"@qq.com";
+				String uName=item[2];
+				String uSex = item[3];
+				Integer uGender ;
+				if(uSex=="男"){
+					uGender=1;
+				}else{
+					uGender=0;
+				}
+				Integer uAge=18;
+				Integer uStatus=0;
+				String uPic="";
+				String uPwd = "123456";
+				UserInfo userInfo = new UserInfo();
+				userInfo.setuAge(uAge);
+				userInfo.setuEmail(uEmail);
+				userInfo.setuGender(uGender);
+				userInfo.setuName(uName);
+				userInfo.setuPic(uPic);
+				userInfo.setuPwd(uPwd);
+				userInfo.setuStatus(uStatus);
+				userInfo.setuId(num);
+				userService.updateByPrimaryKey(userInfo);
+			//	userService.insert(userInfo);
+				String last = item[item.length-1];//这就是你要的数据了
+				//int value = Integer.parseInt(last);//如果是数值，可以转化为数值
+				System.out.println(uName);
+				num++;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	void teststringtoint(){
+//		String a="01";
+//		String ss= "2020-5-15 16:14:2";
+//		String ymd=ss.split(" ")[0];
+//		System.out.println("ymd===="+ymd);
+//		String day=ymd.split("-")[2];
+//		System.out.println("day==="+day);
+//		int aa = Integer.parseInt(a);
+//		System.out.println("aa==="+aa);
+		Calendar cal=Calendar.getInstance();
+		int m=cal.get(Calendar.MONTH);
+		int d=cal.get(Calendar.DATE);
+		System.out.println("m=="+m+" d=="+d);
+	}
+	@Test
+	void updateUPIC(){
+		String content = "<ul class=\"artCont cl\">\n" +
+				"<li class=\"tx-img\"><a href=\"//img2.woyaogexing.com/2020/05/06/81253a12119b41b38b66df26723456ff!400x400.jpeg\" class=\"swipebox\"><img class=\"lazy\" src=\"//img2.woyaogexing.com/2020/05/06/81253a12119b41b38b66df26723456ff!400x400.jpeg\" width=\"200\" height=\"200\"></a></li><li class=\"tx-img\"><a href=\"//img2.woyaogexing.com/2020/05/06/8ef90f84570443f3a7f5e7b650bc9b13!400x400.jpeg\" class=\"swipebox\"><img class=\"lazy\" src=\"//img2.woyaogexing.com/2020/05/06/8ef90f84570443f3a7f5e7b650bc9b13!400x400.jpeg\" width=\"200\" height=\"200\"></a></li><li class=\"tx-img\"><a href=\"//img2.woyaogexing.com/2020/05/06/9989859c4d704b3c9fc4825aeb374099!400x400.jpeg\" class=\"swipebox\"><img class=\"lazy\" src=\"//img2.woyaogexing.com/2020/05/06/9989859c4d704b3c9fc4825aeb374099!400x400.jpeg\" width=\"200\" height=\"200\"></a></li><li class=\"tx-img\"><a href=\"//img2.woyaogexing.com/2020/05/06/70167162aee9458f9376c24439ffe369!400x400.jpeg\" class=\"swipebox\"><img class=\"lazy\" src=\"//img2.woyaogexing.com/2020/05/06/70167162aee9458f9376c24439ffe369!400x400.jpeg\" width=\"200\" height=\"200\"></a></li><li class=\"tx-img\"><a href=\"//img2.woyaogexing.com/2020/05/06/52f234533d924b5c835d2742655eb43e!400x400.jpeg\" class=\"swipebox\"><img class=\"lazy\" src=\"//img2.woyaogexing.com/2020/05/06/52f234533d924b5c835d2742655eb43e!400x400.jpeg\" width=\"200\" height=\"200\"></a></li><li class=\"tx-img\"><a href=\"//img2.woyaogexing.com/2020/05/06/7d7d4e802c1944888ffddbba88e78f79!400x400.jpeg\" class=\"swipebox\"><img class=\"lazy\" src=\"//img2.woyaogexing.com/2020/05/06/7d7d4e802c1944888ffddbba88e78f79!400x400.jpeg\" width=\"200\" height=\"200\"></a></li><li class=\"tx-img\"><a href=\"//img2.woyaogexing.com/2020/05/06/b9ff4ea3aea740f6b8d934cac1917a8d!400x400.jpeg\" class=\"swipebox\"><img class=\"lazy\" src=\"//img2.woyaogexing.com/2020/05/06/b9ff4ea3aea740f6b8d934cac1917a8d!400x400.jpeg\" width=\"200\" height=\"200\"></a></li><li class=\"tx-img\"><a href=\"//img2.woyaogexing.com/2020/05/06/ad83ccb3ff6f49d6a371841a0ba63dee!400x400.jpeg\" class=\"swipebox\"><img class=\"lazy\" src=\"//img2.woyaogexing.com/2020/05/06/ad83ccb3ff6f49d6a371841a0ba63dee!400x400.jpeg\" width=\"200\" height=\"200\"></a></li><li class=\"tx-img\"><a href=\"//img2.woyaogexing.com/2020/05/06/850bf35923b447b98de19ebafe68abca!400x400.jpeg\" class=\"swipebox\"><img class=\"lazy\" src=\"//img2.woyaogexing.com/2020/05/06/850bf35923b447b98de19ebafe68abca!400x400.jpeg\" width=\"200\" height=\"200\"></a></li><li class=\"tx-img\"><a href=\"//img2.woyaogexing.com/2020/05/06/1947cfc640c04bb5ae8a6bb358588f46!400x400.jpeg\" class=\"swipebox\"><img class=\"lazy\" src=\"//img2.woyaogexing.com/2020/05/06/1947cfc640c04bb5ae8a6bb358588f46!400x400.jpeg\" width=\"200\" height=\"200\"></a></li><li class=\"tx-img\"><a href=\"//img2.woyaogexing.com/2020/05/06/1eee190c3df34b7b9a1892e51edc8b3a!400x400.jpeg\" class=\"swipebox\"><img class=\"lazy\" src=\"//img2.woyaogexing.com/2020/05/06/1eee190c3df34b7b9a1892e51edc8b3a!400x400.jpeg\" width=\"200\" height=\"200\"></a></li><li class=\"tx-img\"><a href=\"//img2.woyaogexing.com/2020/05/06/126938c6c2904515876f62198d9fa8c5!400x400.jpeg\" class=\"swipebox\"><img class=\"lazy\" src=\"//img2.woyaogexing.com/2020/05/06/126938c6c2904515876f62198d9fa8c5!400x400.jpeg\" width=\"200\" height=\"200\"></a></li><li class=\"tx-img\"><a href=\"//img2.woyaogexing.com/2020/05/06/7b7eb4c91b3049a4ad458ac06016cc4c!400x400.jpeg\" class=\"swipebox\"><img class=\"lazy\" src=\"//img2.woyaogexing.com/2020/05/06/7b7eb4c91b3049a4ad458ac06016cc4c!400x400.jpeg\" width=\"200\" height=\"200\"></a></li><li class=\"tx-img\"><a href=\"//img2.woyaogexing.com/2020/05/06/3486c5bf1033424d89ca19f738aef9ff!400x400.jpeg\" class=\"swipebox\"><img class=\"lazy\" src=\"//img2.woyaogexing.com/2020/05/06/3486c5bf1033424d89ca19f738aef9ff!400x400.jpeg\" width=\"200\" height=\"200\"></a></li><li class=\"tx-img\"><a href=\"//img2.woyaogexing.com/2020/05/06/b6260c65a0004228b70963b1a0e70fdf!400x400.jpeg\" class=\"swipebox\"><img class=\"lazy\" src=\"//img2.woyaogexing.com/2020/05/06/b6260c65a0004228b70963b1a0e70fdf!400x400.jpeg\" width=\"200\" height=\"200\"></a></li>                </ul>";
+		List <String> list= getImgSrc(content);
+		int num=29;
+		for (String s:list
+				) {
+			UserInfo userInfo=new UserInfo();
+			userInfo.setuStatus(0);
+			userInfo.setuPwd(null);
+			userInfo.setuName(null);
+			userInfo.setuEmail(null);
+			userInfo.setuGender(0);
+			userInfo.setuAge(null);
+			userInfo.setuId(num);
+			String a="ll";
+			userInfo.setuPic(a);
+			userService.updateById(userInfo);
+			num++;
+			if (num==39){
+				break;
+			}
+
+		}
+
+	}
+
+	@Test
+	void TestActive(){
+		//获取当前日期
+		Calendar cal=Calendar.getInstance();
+		int m=cal.get(Calendar.MONTH);
+		int d=cal.get(Calendar.DATE)+1;
+		List<Category> list = categoryMapper.selectAllToActive();
+		for (Category c : list){
+			int clicknum=c.getsCliNum(); //3scord
+			int commentnum=c.getsComNum(); //5scord
+			int looknum =c.getsLookNum();  //1scord
+
+			String time = c.getsTime();
+			String ymd= time.split(" ")[0];
+			String day= ymd.split("-")[2];
+			String month = ymd.split("-")[1];
+			String year = ymd.split("-")[0];
+			//先将时间转换int。
+			//计算出时间差
+			int newm=Integer.parseInt(month);
+			int newd=Integer.parseInt(day);
+			int daynum=0;
+			//不会超过一年，一段时间就会清0了。
+			if (m-newm>0){
+				daynum=30*(m-newd)+d-newd;
+			}else{
+				daynum=d-newd;
+			}
+			int value = calculate(clicknum,commentnum,looknum,daynum);
+			if (value<0){
+				value=0;
+				categoryMapper.updateActiveNum(value,c.getsId());
+			}else{
+				categoryMapper.updateActiveNum(value,c.getsId());
+			}
+
+		}
+
 	}
 
 
+	public int calculate(int clicknum,int commentnum,int looknum,int daynum){
+
+		int Htotal= clicknum*3+looknum*1+commentnum*5;
+		double Htime = 100*Math.pow(2,daynum);
+		double Activenum =Htotal-Htime;
+		if (Activenum<0){
+			int zeron =0;
+			Activenum=zeron;
+			return (int)Activenum;
+		}
+
+		return (int)Activenum;
+	}
 	}//zheshi zuihou yige

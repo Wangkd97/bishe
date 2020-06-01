@@ -5,6 +5,7 @@ import com.ysu.tour.comment.ServerResponse;
 import com.ysu.tour.dao.PeopleMapper;
 import com.ysu.tour.pojo.People;
 import com.ysu.tour.service.IPeopleService;
+import com.ysu.tour.viewobject.SysActiveVo;
 import com.ysu.tour.viewobject.TagsVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -78,6 +79,30 @@ public class PeopleServiceImpl implements IPeopleService {
             return ServerResponse.createServerResponseByFail("未找到");
         }
     }
+
+
+
+//    以下是管理员
+
+    @Override
+    public List<People> sysselectAll() {
+       List<People> list = peopleMapper.sysselectAll();
+
+       return list;
+    }
+
+    @Override
+    public int sysupdateStatus(Integer status, Integer id) {
+       int value = peopleMapper.sysupdateStatus(status,id);
+        return value;
+    }
+
+    @Override
+    public int sysinsert(People people) {
+        int value = peopleMapper.sysinsert(people);
+        return value;
+    }
+
 
 
 }//end

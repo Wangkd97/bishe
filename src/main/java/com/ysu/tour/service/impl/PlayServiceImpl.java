@@ -65,4 +65,30 @@ public class PlayServiceImpl implements IPlayService {
         }
 
     }
+
+
+
+//    以下是管理员
+    @Override
+    public List<Play> sysselectAll() {
+      List<Play> list = playMapper.sysselectAll();
+
+        return list;
+    }
+
+    @Override
+    public int sysupdateStatus(Integer status, Integer id) {
+        int value = playMapper.sysupdateStatus(status,id);
+
+        return value;
+    }
+
+    @Override
+    public int sysinsert(Play play) {
+
+        int value = playMapper.sysinsert(play);
+        return value;
+    }
+
+
 }

@@ -52,4 +52,25 @@ public class SeasonServiceImpl implements ISeasonService {
 
     }
 
+
+//    以下是管理员
+    @Override
+    public List<Season> sysselectAll() {
+       List<Season> list = seasonMapper.sysselectAll();
+        return list;
+    }
+
+    @Override
+    public int sysupdateStatus(Integer status, Integer id) {
+        int value=seasonMapper.sysupdateStatus(status,id);
+        return value;
+    }
+
+    @Override
+    public int sysinsert(Season season) {
+
+       int value = seasonMapper.sysinsert(season);
+        return value;
+    }
+
 }

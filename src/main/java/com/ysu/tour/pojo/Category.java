@@ -7,6 +7,16 @@ public class Category {
      *
      * @mbggenerated
      */
+    private Integer sActiveNum;
+
+    public Integer getsActiveNum() {
+        return sActiveNum;
+    }
+
+    public void setsActiveNum(Integer sActiveNum) {
+        this.sActiveNum = sActiveNum;
+    }
+
     private Integer sMasterId;
 
     public Integer getsMasterId() {

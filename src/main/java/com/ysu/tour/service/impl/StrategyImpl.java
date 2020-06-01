@@ -12,6 +12,7 @@ import com.ysu.tour.pojo.*;
 import com.ysu.tour.service.ISeasonService;
 import com.ysu.tour.service.IStrategyService;
 import com.ysu.tour.viewobject.StrategyVO;
+import com.ysu.tour.viewobject.SysStrategyVo;
 import com.ysu.tour.viewobject.TagsVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -376,6 +377,455 @@ public class StrategyImpl implements IStrategyService {
         }
     }
 
+    @Override
+    public ServerResponse selectAllByUserId(Integer userId,Integer start) {
+       List<Category> categories = categoryMapper.selectAllByUserId(userId,start);
+        List<StrategyVO> strategyVOS=new ArrayList<>();
+        if (categories!=null){
+            for (Category cate:categories) {
+                int season_id = cate.getsSeasonId();
+                Season season = seasonMapper.selectById(season_id);   //获取该攻略的season
+                People people=peopleMapper.selectByPrimaryKey(cate.getsPeopleId()); //获取该攻略的人物
+                List<Play> list = playMapper.selectById(cate.getsId());
+                List<String> stringList= new ArrayList<>();
+                List<String> piclist=new ArrayList<>();
+                if(list!=null)
+                    for (Play p:list) {
+                        stringList.add(p.getPlayName());
+                    }
+                UserInfo userInfo=userInfoMapper.selectByPrimaryKey(cate.getsMasterId());
+                List<CategoryPic> categoryPics=categoryPicMapper.selectBySId(cate.getsId());
+                if (categoryPics.size()==0){
+                    piclist.add(cate.getsCover());
+                    piclist.add(cate.getsCover());
+                    piclist.add(cate.getsCover());
+                    piclist.add(cate.getsCover());
+                }else if(categoryPics.size()==1){
+                    piclist.add(categoryPics.get(0).getSpicUrl());
+                    piclist.add(cate.getsCover());
+                    piclist.add(cate.getsCover());
+                    piclist.add(cate.getsCover());
+
+                }else if(categoryPics.size()==2){
+                    piclist.add(categoryPics.get(0).getSpicUrl());
+                    piclist.add(categoryPics.get(1).getSpicUrl());
+                    piclist.add(cate.getsCover());
+                    piclist.add(cate.getsCover());
+                }else if(categoryPics.size()==3){
+                    piclist.add(categoryPics.get(0).getSpicUrl());
+                    piclist.add(categoryPics.get(1).getSpicUrl());
+                    piclist.add(categoryPics.get(2).getSpicUrl());
+                    piclist.add(cate.getsCover());
+                }else {
+                    piclist.add(categoryPics.get(0).getSpicUrl());
+                    piclist.add(categoryPics.get(1).getSpicUrl());
+                    piclist.add(categoryPics.get(2).getSpicUrl());
+                    piclist.add(categoryPics.get(3).getSpicUrl());
+                }
+                //声明strategyvo
+                StrategyVO strategyVO= new StrategyVO();
+                strategyVO.setsPics(piclist);
+                strategyVO.setsMasterId(cate.getsMasterId());
+                strategyVO.setsMasterUrl(userInfo.getuPic());
+                strategyVO.setsMasterName(userInfo.getuName());
+                strategyVO.setsId(cate.getsId());
+                strategyVO.setsCover(cate.getsCover());
+                strategyVO.setsText(cate.getsText());
+                strategyVO.setsPlay(stringList);
+                strategyVO.setsPeople(people.getPeoName());
+                strategyVO.setsCliNum(cate.getsCliNum());
+                strategyVO.setsComNum(cate.getsComNum());
+                strategyVO.setsDay(cate.getsDay());
+                strategyVO.setsGotime(cate.getsGotime());
+                strategyVO.setsName(cate.getsName());
+                strategyVO.setsLookNum(cate.getsLookNum());
+                strategyVO.setsPay(cate.getsPay());
+                strategyVO.setsStatus(cate.getsStatus());
+                if (season!=null)
+                    strategyVO.setsSeason(season.getSeasonName());
+                strategyVO.setsTime(cate.getsTime());
+                strategyVOS.add(strategyVO);
+            }
+            return ServerResponse.createServerResponseBySucess(strategyVOS);
+        }else{
+            return ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"无攻略");
+        }
+
+
+    }
+
+    @Override
+    public ServerResponse selectDoByUserId(Integer userId,Integer start) {
+        List<Category> categories = categoryMapper.selectDoByUserId(userId,start);
+        List<StrategyVO> strategyVOS=new ArrayList<>();
+        if (categories!=null){
+            for (Category cate:categories) {
+                int season_id = cate.getsSeasonId();
+                Season season = seasonMapper.selectById(season_id);   //获取该攻略的season
+                People people=peopleMapper.selectByPrimaryKey(cate.getsPeopleId()); //获取该攻略的人物
+                List<Play> list = playMapper.selectById(cate.getsId());
+                List<String> stringList= new ArrayList<>();
+                List<String> piclist=new ArrayList<>();
+                if(list!=null)
+                    for (Play p:list) {
+                        stringList.add(p.getPlayName());
+                    }
+                UserInfo userInfo=userInfoMapper.selectByPrimaryKey(cate.getsMasterId());
+                List<CategoryPic> categoryPics=categoryPicMapper.selectBySId(cate.getsId());
+                if (categoryPics.size()==0){
+                    piclist.add(cate.getsCover());
+                    piclist.add(cate.getsCover());
+                    piclist.add(cate.getsCover());
+                    piclist.add(cate.getsCover());
+                }else if(categoryPics.size()==1){
+                    piclist.add(categoryPics.get(0).getSpicUrl());
+                    piclist.add(cate.getsCover());
+                    piclist.add(cate.getsCover());
+                    piclist.add(cate.getsCover());
+
+                }else if(categoryPics.size()==2){
+                    piclist.add(categoryPics.get(0).getSpicUrl());
+                    piclist.add(categoryPics.get(1).getSpicUrl());
+                    piclist.add(cate.getsCover());
+                    piclist.add(cate.getsCover());
+                }else if(categoryPics.size()==3){
+                    piclist.add(categoryPics.get(0).getSpicUrl());
+                    piclist.add(categoryPics.get(1).getSpicUrl());
+                    piclist.add(categoryPics.get(2).getSpicUrl());
+                    piclist.add(cate.getsCover());
+                }else {
+                    piclist.add(categoryPics.get(0).getSpicUrl());
+                    piclist.add(categoryPics.get(1).getSpicUrl());
+                    piclist.add(categoryPics.get(2).getSpicUrl());
+                    piclist.add(categoryPics.get(3).getSpicUrl());
+                }
+                //声明strategyvo
+                StrategyVO strategyVO= new StrategyVO();
+                strategyVO.setsPics(piclist);
+                strategyVO.setsMasterId(cate.getsMasterId());
+                strategyVO.setsMasterUrl(userInfo.getuPic());
+                strategyVO.setsMasterName(userInfo.getuName());
+                strategyVO.setsId(cate.getsId());
+                strategyVO.setsCover(cate.getsCover());
+                strategyVO.setsText(cate.getsText());
+                strategyVO.setsPlay(stringList);
+                strategyVO.setsPeople(people.getPeoName());
+                strategyVO.setsCliNum(cate.getsCliNum());
+                strategyVO.setsComNum(cate.getsComNum());
+                strategyVO.setsDay(cate.getsDay());
+                strategyVO.setsGotime(cate.getsGotime());
+                strategyVO.setsName(cate.getsName());
+                strategyVO.setsLookNum(cate.getsLookNum());
+                strategyVO.setsPay(cate.getsPay());
+                if (season!=null)
+                    strategyVO.setsSeason(season.getSeasonName());
+                strategyVO.setsTime(cate.getsTime());
+                strategyVOS.add(strategyVO);
+            }
+            return ServerResponse.createServerResponseBySucess(strategyVOS);
+        }else{
+            return ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"无攻略");
+        }
+
+    }
+
+    @Override
+    public ServerResponse selectUnDoByUserId(Integer userId,Integer start) {
+       List<Category> categories = categoryMapper.selectUnDoByUserId(userId,start);
+        List<StrategyVO> strategyVOS=new ArrayList<>();
+        if (categories!=null){
+            for (Category cate:categories) {
+                int season_id = cate.getsSeasonId();
+                Season season = seasonMapper.selectById(season_id);   //获取该攻略的season
+                People people=peopleMapper.selectByPrimaryKey(cate.getsPeopleId()); //获取该攻略的人物
+                List<Play> list = playMapper.selectById(cate.getsId());
+                List<String> stringList= new ArrayList<>();
+                List<String> piclist=new ArrayList<>();
+                if(list!=null)
+                    for (Play p:list) {
+                        stringList.add(p.getPlayName());
+                    }
+                UserInfo userInfo=userInfoMapper.selectByPrimaryKey(cate.getsMasterId());
+                List<CategoryPic> categoryPics=categoryPicMapper.selectBySId(cate.getsId());
+                if (categoryPics.size()==0){
+                    piclist.add(cate.getsCover());
+                    piclist.add(cate.getsCover());
+                    piclist.add(cate.getsCover());
+                    piclist.add(cate.getsCover());
+                }else if(categoryPics.size()==1){
+                    piclist.add(categoryPics.get(0).getSpicUrl());
+                    piclist.add(cate.getsCover());
+                    piclist.add(cate.getsCover());
+                    piclist.add(cate.getsCover());
+
+                }else if(categoryPics.size()==2){
+                    piclist.add(categoryPics.get(0).getSpicUrl());
+                    piclist.add(categoryPics.get(1).getSpicUrl());
+                    piclist.add(cate.getsCover());
+                    piclist.add(cate.getsCover());
+                }else if(categoryPics.size()==3){
+                    piclist.add(categoryPics.get(0).getSpicUrl());
+                    piclist.add(categoryPics.get(1).getSpicUrl());
+                    piclist.add(categoryPics.get(2).getSpicUrl());
+                    piclist.add(cate.getsCover());
+                }else {
+                    piclist.add(categoryPics.get(0).getSpicUrl());
+                    piclist.add(categoryPics.get(1).getSpicUrl());
+                    piclist.add(categoryPics.get(2).getSpicUrl());
+                    piclist.add(categoryPics.get(3).getSpicUrl());
+                }
+                //声明strategyvo
+                StrategyVO strategyVO= new StrategyVO();
+                strategyVO.setsPics(piclist);
+                strategyVO.setsMasterId(cate.getsMasterId());
+                strategyVO.setsMasterUrl(userInfo.getuPic());
+                strategyVO.setsMasterName(userInfo.getuName());
+                strategyVO.setsId(cate.getsId());
+                strategyVO.setsCover(cate.getsCover());
+                strategyVO.setsText(cate.getsText());
+                strategyVO.setsPlay(stringList);
+                strategyVO.setsPeople(people.getPeoName());
+                strategyVO.setsCliNum(cate.getsCliNum());
+                strategyVO.setsComNum(cate.getsComNum());
+                strategyVO.setsDay(cate.getsDay());
+                strategyVO.setsGotime(cate.getsGotime());
+                strategyVO.setsName(cate.getsName());
+                strategyVO.setsLookNum(cate.getsLookNum());
+                strategyVO.setsPay(cate.getsPay());
+                if (season!=null)
+                    strategyVO.setsSeason(season.getSeasonName());
+                strategyVO.setsTime(cate.getsTime());
+                strategyVOS.add(strategyVO);
+            }
+            return ServerResponse.createServerResponseBySucess(strategyVOS);
+        }else{
+            return ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"无攻略");
+        }
+
+
+    }
+
+    @Override
+    public ServerResponse selectcountallByUser(Integer userId) {
+        int value=categoryMapper.selectcountallByUser(userId);
+        if (value>0){
+            return  ServerResponse.createServerResponseBySucess(value);
+        }else{
+            return ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"失败");
+        }
+    }
+
+    @Override
+    public ServerResponse selectcountallIfDoByUser(Integer userId, Integer status) {
+        int value=categoryMapper.selectcountallIfDoByUser(userId,status);
+        if (value>0){
+            return  ServerResponse.createServerResponseBySucess(value);
+        }else{
+            return ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"失败");
+        }
+    }
+
+    @Override
+    public ServerResponse updateStatus(Integer strategyId) {
+        int value= categoryMapper.updateStatus(strategyId);
+        if (value>0){
+            return  ServerResponse.createServerResponseBySucess(value);
+        }else{
+            return  ServerResponse.createServerResponseByFail("失败");
+        }
+    }
+
+    @Override
+    public ServerResponse updateStrategy(StrategyVO category) {
+        int value = categoryMapper.updateStrategy(category);
+        if(category.getOldPlayId()!=null){
+            int value2= categoryMapper.updateStrategyPlay(category.getsPlayId(),category.getsId(),category.getOldPlayId());
+            if (value>0&&value2>0){
+                return  ServerResponse.createServerResponseBySucess(value);
+            }else{
+                return ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"失败");
+            }
+        }else{
+            if (value>0){
+                return  ServerResponse.createServerResponseBySucess(value);
+            }else{
+                return ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"失败");
+            }
+        }
+
+
+    }
+
+    @Override
+    public ServerResponse updateLookNum(Integer sId) {
+        int value = categoryMapper.updateLookNum(sId);
+        if (value>0){
+            return ServerResponse.createServerResponseBySucess(value);
+        }else{
+            return ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"失败");
+        }
+    }
+
+    @Override
+    public ServerResponse updateClickNum(Integer sId) {
+        int value = categoryMapper.updateClickNum(sId);
+        if (value>0){
+            return ServerResponse.createServerResponseBySucess(value);
+        }else{
+            return ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"失败");
+        }
+    }
+
+    @Override
+    public ServerResponse updateCommentNum(Integer sId) {
+        int value = categoryMapper.updateCommentNum(sId);
+        if (value>0){
+            return ServerResponse.createServerResponseBySucess(value);
+        }else{
+            return ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"失败");
+        }
+    }
+
+    @Override
+    public int substractCommentNum(Integer sId) {
+        int value = categoryMapper.substractCommentNum(sId);
+        if (value>0){
+            return value;
+        }else{
+            return value;
+        }
+    }
+
+    @Override
+    public int substractLookNum(Integer sId) {
+        int value = categoryMapper.substractLookNum(sId);
+        if (value>0){
+            return value;
+        }else{
+            return value;
+        }
+    }
+
+    @Override
+    public int substractClickNum(Integer sId) {
+        int value = categoryMapper.substractClickNum(sId);
+        if (value>0){
+            return value;
+        }else{
+            return value;
+        }
+    }
+
+    @Override
+    public Category selectMasterBysId(Integer sId) {
+        Category value = categoryMapper.selectMasterBysId(sId);
+        return value;
+    }
+
+    @Override
+    public Category selectActiveBysId(Integer sId) {
+        Category value = categoryMapper.selectActiveBysId(sId);
+        return value;
+    }
+
+    @Override
+    public int updateActiveNum(Integer sActiveNum, Integer sId) {
+
+        int value = categoryMapper.updateActiveNum(sActiveNum,sId);
+        return value;
+    }
+
+    @Override
+    public List<Category> selectActiveTopFive(){
+        List<Category> list = categoryMapper.selectActiveTopFive();
+        return list;
+
+    }
+
+    //以下是实现的是管理员，
+    @Override
+    public ServerResponse sysSelectAll(Integer start) {
+
+        List<SysStrategyVo> list= categoryMapper.sysSelectAll(start);
+        if (list.size()>0){
+            return ServerResponse.createServerResponseBySucess(list);
+        }else{
+            return ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"失败");
+        }
+    }
+
+    @Override
+    public ServerResponse sysUpdateStatus(Integer strategyId) {
+        int value = categoryMapper.sysUpdateStatus(strategyId);
+        if (value>0){
+            return ServerResponse.createServerResponseBySucess(value);
+        }else{
+            return ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"失败");
+        }
+    }
+
+    @Override
+    public ServerResponse sysSelectAllCount() {
+        int value = categoryMapper.sysSelectAllCount();
+        if (value>0){
+            return ServerResponse.createServerResponseBySucess(value);
+        }else{
+            return  ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"失败");
+        }
+
+    }
+
+    @Override
+    public ServerResponse sysSelectIfNot(Integer status, Integer start) {
+        List<SysStrategyVo> list= categoryMapper.sysSelectIfNot(status,start);
+        if (list.size()>0){
+            return ServerResponse.createServerResponseBySucess(list);
+        }else{
+            return ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"失败");
+        }
+    }
+
+    @Override
+    public ServerResponse sysSelectIfNotCount(Integer start) {
+        int value = categoryMapper.sysSelectIfNotCount(start);
+        if (value>0){
+            return ServerResponse.createServerResponseBySucess(value);
+        }else{
+            return  ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"失败");
+        }
+    }
+
+    @Override
+    public ServerResponse sysFuzzySelect(Integer status, Integer start, String name) {
+       String newname = '%'+name+'%';
+       List<SysStrategyVo> list = categoryMapper.sysFuzzySelect(status,start,newname);
+       if (list.size()>0){
+           return ServerResponse.createServerResponseBySucess(list);
+       }else{
+           return ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"失败");
+       }
+    }
+
+    @Override
+    public ServerResponse syscountfuzzyall(Integer status, String name) {
+        String newname= '%'+name+'%';
+      int value = categoryMapper.syscountfuzzyall(status,newname);
+      if (value>0){
+          return ServerResponse.createServerResponseBySucess(value);
+      }else{
+          return ServerResponse.createServerResponseByFail(ResponseCode.ERROR,"失败");
+      }
+    }
+
+    @Override
+    public List<Category> sysselectActiveTopTen(){
+        List<Category> list = categoryMapper.sysselectActiveTopTen();
+        return list;
+
+    }
+
+
+    //
 
     public ServerResponse strategyVo( List<Category> categories,List<StrategyVO> strategyVOS){
         if (categories!=null){

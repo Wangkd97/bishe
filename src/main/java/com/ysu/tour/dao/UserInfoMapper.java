@@ -1,6 +1,7 @@
 package com.ysu.tour.dao;
 
 import com.ysu.tour.pojo.UserInfo;
+import org.apache.catalina.User;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -46,4 +47,18 @@ public interface UserInfoMapper {
      */
     int updateByPrimaryKey(UserInfo record);
     UserInfo selectByUserNameAndPwd( @Param("user")UserInfo userInfo);
+    List<UserInfo> sysSelectAll();
+    int updatePwd(UserInfo userInfo);
+    UserInfo selectStatusByEmail(String Email);
+
+//    以下是管理员
+    List<UserInfo> sysfenyeselectAll(Integer start);
+    int sysfenyeselectAllCount();
+    int sysupdateStatus(@Param("status") Integer status,@Param("uId") Integer uId);
+    UserInfo sysselectByEmail(String uEmail);
+    UserInfo sysselectByEmailandPwd(@Param("uEmail") String uEmail,@Param("uPwd") String uPwd);
+
+    //插入数据用
+    int updateById(UserInfo userInfo);
+
 }

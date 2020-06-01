@@ -8,15 +8,9 @@ public class StrategyVO {
         return sTime;
     }
 
-    private String sGotime;
 
-    public String getsGotime() {
-        return sGotime;
-    }
 
-    public void setsGotime(String sGotime) {
-        this.sGotime = sGotime;
-    }
+
     private Integer sId;  //攻略id
     private String sTime;   //攻略发布时间
     private String sName;   //攻略名称
@@ -35,6 +29,51 @@ public class StrategyVO {
     private Integer sMasterId;
     private String sMasterUrl;
     private List<String> sPics;
+    private Integer oldPlayId;
+    private Integer sPeopleId;
+    private Integer sPlayId;
+    private Integer sSeasonId;
+    private String sGotime;
+    private String sSeason;  //攻略的时节
+
+    public Integer getsPeopleId() {
+        return sPeopleId;
+    }
+
+    public void setsPeopleId(Integer sPeopleId) {
+        this.sPeopleId = sPeopleId;
+    }
+
+    public Integer getsPlayId() {
+        return sPlayId;
+    }
+
+    public void setsPlayId(Integer sPlayId) {
+        this.sPlayId = sPlayId;
+    }
+
+    public Integer getsSeasonId() {
+        return sSeasonId;
+    }
+
+    public void setsSeasonId(Integer sSeasonId) {
+        this.sSeasonId = sSeasonId;
+    }
+
+    public String getsGotime() {
+        return sGotime;
+    }
+
+    public void setsGotime(String sGotime) {
+        this.sGotime = sGotime;
+    }
+    public Integer getOldPlayId() {
+        return oldPlayId;
+    }
+
+    public void setOldPlayId(Integer oldPlayId) {
+        this.oldPlayId = oldPlayId;
+    }
 
     public List<String> getsPics() {
         return sPics;
@@ -68,7 +107,7 @@ public class StrategyVO {
         this.sMasterUrl = sMasterUrl;
     }
 
-    private String sSeason;  //攻略的时节
+
     public Integer getsId() {
         return sId;
     }

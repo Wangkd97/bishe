@@ -1,6 +1,8 @@
 package com.ysu.tour.dao;
 
 import com.ysu.tour.pojo.People;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 public interface PeopleMapper {
@@ -43,4 +45,13 @@ public interface PeopleMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(People record);
+
+
+
+//    以下是管理员
+
+    List<People> sysselectAll();
+    int sysupdateStatus(@Param("status") Integer status, @Param("id") Integer id);
+    int sysinsert(People people);
+
 }
